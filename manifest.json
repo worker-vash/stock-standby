@@ -1,0 +1,16 @@
+{
+  "name": "Stock StandBy (스톡 스탠바이)",
+  "short_name": "스톡스탠바이",
+  "start_url": "./index.html",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
