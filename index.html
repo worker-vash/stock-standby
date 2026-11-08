@@ -31,38 +31,35 @@
       세로로 계속 보기 ➔
     </button>
   </div>
+
   <div id="device-wrapper">
     <div id="standby-container">
       
-      <!-- 상단 One UI 9.0 스타일 상태 & Now Brief 바 -->
+      <!-- 상단 One UI 9.0 스타일 상태 & 툴바 -->
       <header class="top-bar">
         <div class="top-left-status">
           <span class="oneui-badge live">
             <span class="live-dot"></span>
-            LIVE <span id="last-sync-time">12:00:00</span>
+            LIVE <span id="last-sync-time">12:24:46</span>
           </span>
-          <!-- 거래소 실시간 운영 상태 (KRX 정규장 & 대체거래소 NXT) -->
+          <span class="oneui-badge charge" id="battery-status-badge">⚡ 71% 배터리</span>
           <span id="market-session-badge" class="oneui-badge market-status">
-            대체거래소(NXT) 08:00 개장 예정
+            주말 휴장 (대체거래소/KRX 휴장)
           </span>
-          <span class="oneui-badge charge">⚡ 98% 충전 중</span>
-        </div>
-
-        <div class="top-center-tools">
-          <button id="toggle-edit-mode-btn" class="oneui-pill-btn edit-btn">
-            🖐️ 위젯 편집 모드
-          </button>
-          <button id="open-stock-manager-btn" class="oneui-pill-btn">
-            🔍 종목 &amp; 지수 검색/관리
-          </button>
         </div>
 
         <div class="top-right-tools">
-          <button id="toggle-device-frame-btn" class="oneui-icon-btn" title="화면 비율 전환">
-            📱 화면 비율
+          <button id="routine-guide-btn" class="oneui-pill-btn blue">
+            ⚡ 갤럭시 루틴 안내
+          </button>
+          <button id="theme-preset-btn" class="oneui-pill-btn amber">
+            👔 테마: 클래식 ▾
+          </button>
+          <button id="toggle-edit-mode-btn" class="oneui-pill-btn edit-btn">
+            🖐️ 위젯 꾹 누르면 조절
           </button>
           <button id="night-btn" class="oneui-icon-btn" title="야간 모드">
-            🌙 야간 모드
+            🌙
           </button>
           <button id="fullscreen-btn" class="oneui-icon-btn" title="전체화면">
             ⛶
@@ -70,89 +67,53 @@
         </div>
       </header>
 
-      <!-- One UI 9 Now Brief 정보 띠 (대체거래소 NXT 시간 및 구글 캘린더 안내) -->
-      <div class="oneui-now-brief">
-        <div class="brief-item">
-          <span class="brief-icon">🏛️</span>
-          <span class="brief-text"><strong>거래 시간:</strong> 정규장 09:00~15:30 | <strong>대체거래소(NXT)</strong> 08:00~20:00 실시간 연동</span>
-        </div>
-        <div class="brief-item">
-          <span class="brief-icon">🗓️</span>
-          <span class="brief-text"><strong>Google 캘린더:</strong> 폰 계정(hyunj@...) 자동 동기화 활성</span>
-        </div>
-      </div>
-
-      <!-- 편집 모드 알림 바 (핸들 드래그 및 위치 교체 안내) -->
+      <!-- 편집 모드 퀵 액션 바 -->
       <div id="edit-mode-quick-bar" class="edit-quick-bar hidden">
-        <span class="quick-tip">💡 <strong>One UI 9 위젯 조절:</strong> 위젯을 <strong>클릭</strong>하면 나타나는 <strong>상하좌우 조절점(●)</strong>을 드래그하세요. <strong>[위치 교체]</strong>로 서로 자리를 바꿀 수 있습니다.</span>
+        <span class="quick-tip">💡 <strong>분할선 조절:</strong> 카드 사이의 파란 분할선을 좌우/상하로 드래그하여 크기를 조절하세요.</span>
         <div class="quick-actions">
-          <button id="btn-swap-main-columns" class="oneui-pill-btn small">⇄ 좌/우 영역 교체</button>
-          <button id="btn-swap-left-widgets" class="oneui-pill-btn small">⇅ 시계/캘린더 순서 교체</button>
-          <button id="btn-reset-layout" class="oneui-pill-btn small">↺ 크기 초기화</button>
-          <button id="btn-edit-done" class="oneui-pill-btn small done">✓ 편집 완료</button>
+          <button id="btn-swap-lr" class="oneui-pill-btn small">좌우 반전 ⇄</button>
+          <button id="btn-reset-layout" class="oneui-pill-btn small">↺ 초기화</button>
+          <button id="btn-edit-done" class="oneui-pill-btn small done">✓ 조절 완료</button>
         </div>
       </div>
 
-      <!-- 메인 캔버스: One UI 9 글래시 플로팅 위젯 캔버스 -->
-      <main id="widgets-canvas" class="widgets-canvas">
+      <!-- 메인 3컬럼 클래식 카드 레이아웃 -->
+      <main id="main-content-area" class="main-content-layout">
         
-        <!-- 상단 분할 영역 (좌측 열 vs 우측 열) -->
-        <section id="upper-split-zone" class="upper-zone">
+        <!-- 상단 3개 카드 영역: [시계] | 분할선1 | [구글 캘린더] | 분할선2 | [국내 주가] -->
+        <section id="upper-cards-zone" class="upper-cards-row">
           
-          <!-- 좌측 열 (시계 & 구글 캘린더) -->
-          <div id="col-left" class="widget-column">
-            
-            <!-- 1. 시계 위젯 (어떤 크기든 항상 완벽한 정중앙에 배치 & 5가지 스타일) -->
-            <div id="widget-clock" class="android-widget" data-widget="clock">
-              <!-- 선택 시 나타나는 상하좌우 조절점 핸들들 -->
-              <div class="resize-handle handle-top"></div>
-              <div class="resize-handle handle-bottom"></div>
-              <div class="resize-handle handle-left"></div>
-              <div class="resize-handle handle-right"></div>
-              <div class="widget-action-tag">
-                <span class="tag-title">시계 위젯</span>
-                <span class="clock-face-btn" id="clock-style-toggle">스타일: 볼드 디지털 ▾</span>
+          <!-- 1. 좌측 시계 카드 -->
+          <div id="card-clock" class="standby-card card-clock">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="card-icon">📅</span>
+                <span class="card-title-text" id="clock-date-header">11월 7일 토요일</span>
+              </div>
+              <button class="card-chip-btn" id="clock-style-toggle">시계 모양 ▾</button>
+            </div>
+
+            <!-- 시계 페이스 컨테이너 -->
+            <div class="card-body clock-body-centered">
+              <!-- 1) 볼드 디지털 -->
+              <div id="clock-view-digital" class="clock-face-wrap hidden">
+                <div class="digital-clock-time">
+                  <span id="h-dyn">12</span><span class="colon">:</span><span id="m-dyn">24</span><span class="seconds" id="s-dyn">46</span>
+                </div>
               </div>
 
-              <!-- 시계 본체 내용: 어떤 크기로 늘리든 수직/수평 완전 정중앙 배치 -->
-              <div class="widget-inner clock-centered-container">
-                <div class="w-clock-date" id="date-display">11월 5일 목요일</div>
-                
-                <!-- 1) 볼드 디지털 (기본) -->
-                <div id="clock-view-digital" class="clock-display-wrap">
-                  <div class="w-clock-digits">
-                    <span id="h-dyn">12</span><span class="colon">:</span><span id="m-dyn">00</span><span class="seconds" id="s-dyn">00</span>
-                  </div>
+              <!-- 2) 스택형 수직 2단 시계 -->
+              <div id="clock-view-stacked" class="clock-face-wrap hidden">
+                <div class="stacked-digits">
+                  <div class="stacked-hours" id="st-h-dyn">12</div>
+                  <div class="stacked-mins" id="st-m-dyn">24</div>
                 </div>
+              </div>
 
-                <!-- 2) 스택형 수직 타이포 (미니멀 2단) -->
-                <div id="clock-view-stacked" class="clock-display-wrap hidden">
-                  <div class="stacked-clock-container">
-                    <div class="stacked-digits">
-                      <div class="stacked-hours" id="st-h-dyn">12</div>
-                      <div class="stacked-mins" id="st-m-dyn">00</div>
-                    </div>
-                    <div class="stacked-meta">
-                      <div class="stacked-date" id="st-date-dyn">11.05 목</div>
-                      <div class="stacked-sec" id="st-sec-dyn">:00</div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 3) 레트로 플립 시계 -->
-                <div id="clock-view-flip" class="clock-display-wrap hidden">
-                  <div class="flip-clock-row">
-                    <div class="flip-card-unit" id="f-h-dyn">12</div>
-                    <div class="flip-colon">:</div>
-                    <div class="flip-card-unit" id="f-m-dyn">00</div>
-                    <div class="flip-sec-text" id="f-s-dyn">00</div>
-                  </div>
-                </div>
-
-                <!-- 4) 클래식 크로노 아날로그 -->
-                <div id="clock-view-analog" class="clock-display-wrap hidden">
+              <!-- 3) 클래식 크로노 아날로그 시계 (기본 표시) -->
+              <div id="clock-view-analog" class="clock-face-wrap">
+                <div class="analog-dial-box">
                   <div class="analog-dial">
-                    <!-- 12개 시간 눈금 인덱스 -->
                     <div class="dial-ticks">
                       <span class="tick t-12"></span><span class="tick t-3"></span>
                       <span class="tick t-6"></span><span class="tick t-9"></span>
@@ -163,252 +124,320 @@
                     <div class="dial-center-dot"></div>
                   </div>
                 </div>
+              </div>
 
-                <!-- 5) 사이버 터미널 HUD -->
-                <div id="clock-view-terminal" class="clock-display-wrap hidden">
-                  <div class="terminal-clock-box">
-                    <div class="terminal-row"><span class="term-dim">&gt; TIME_KST:</span> <span class="term-green" id="term-time-dyn">01:25:40</span> <span class="term-amber" id="term-sec-dyn">.00</span></div>
-                    <div class="terminal-row"><span class="term-dim">&gt; DATE_SYS:</span> <span class="term-cyan" id="term-date-dyn">2026-11-05 THU</span></div>
-                    <div class="terminal-row"><span class="term-dim">&gt; ATS_SESSION:</span> <span class="term-amber" id="term-session-dyn">NXT_ATS_READY</span></div>
-                    <div class="terminal-row"><span class="term-dim">&gt; PWR_STATE:</span> <span class="term-green">FAST_CHARGING 98%</span></div>
-                  </div>
+              <!-- 4) 레트로 플립 시계 -->
+              <div id="clock-view-flip" class="clock-face-wrap hidden">
+                <div class="flip-clock-row">
+                  <div class="flip-unit" id="f-h-dyn">12</div>
+                  <div class="flip-colon">:</div>
+                  <div class="flip-unit" id="f-m-dyn">24</div>
                 </div>
+              </div>
 
+              <!-- 5) 사이버 터미널 시계 -->
+              <div id="clock-view-terminal" class="clock-face-wrap hidden">
+                <div class="terminal-text">
+                  <div>&gt; TIME: <span class="term-green" id="term-time-dyn">12:24:46</span></div>
+                  <div>&gt; DATE: <span class="term-cyan" id="term-date-dyn">2026-11-07 SAT</span></div>
+                  <div>&gt; ATS: <span class="term-amber">KRX/NXT_CLOSED</span></div>
+                </div>
               </div>
             </div>
-
-            <!-- 2. 구글 캘린더 위젯 (월 캘린더 그리드 / 주간 아젠다 / 요약 뷰 3종) -->
-            <div id="widget-calendar" class="android-widget" data-widget="calendar">
-              <div class="resize-handle handle-top"></div>
-              <div class="resize-handle handle-bottom"></div>
-              <div class="resize-handle handle-left"></div>
-              <div class="resize-handle handle-right"></div>
-              <div class="widget-action-tag">
-                <span class="tag-title">Google 캘린더</span>
-                <span class="cal-view-switch" id="cal-view-toggle">보기: 월 캘린더 그리드 ▾</span>
-              </div>
-
-              <!-- 구글 캘린더 본체 -->
-              <div class="widget-inner gcal-inner">
-                <div class="gcal-header">
-                  <div class="gcal-logo-title">
-                    <svg class="gcal-svg-icon" viewBox="0 0 24 24" width="18" height="18">
-                      <path fill="#4285F4" d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
-                      <path fill="#EA4335" d="M11 11h2v5h-2z"/>
-                    </svg>
-                    <span class="gcal-name">Google Calendar</span>
-                    <span class="gcal-sync-pill">● 동기화됨</span>
-                  </div>
-                  <span class="gcal-today-badge" id="gcal-badge-text">오늘 11월 5일</span>
-                </div>
-
-                <!-- [뷰 1] 한 달 전체가 시원하게 나오는 월 캘린더 그리드 (Full Month Grid) -->
-                <div id="gcal-month-view" class="gcal-month-container">
-                  <div class="month-nav-bar">
-                    <button class="cal-nav-arrow" id="cal-prev-btn" title="이전 달">‹</button>
-                    <span class="cal-month-title" id="cal-month-title">2026년 11월</span>
-                    <button class="cal-nav-arrow" id="cal-next-btn" title="다음 달">›</button>
-                    <button class="cal-today-pill" id="cal-today-btn">오늘</button>
-                  </div>
-                  <!-- 요일 헤더 -->
-                  <div class="cal-week-labels">
-                    <span class="lbl-sun">일</span>
-                    <span>월</span>
-                    <span>화</span>
-                    <span>수</span>
-                    <span>목</span>
-                    <span>금</span>
-                    <span class="lbl-sat">토</span>
-                  </div>
-                  <!-- 1일~31일 전체 달력 그리드 (JS 동적 렌더링) -->
-                  <div class="cal-month-cells" id="cal-month-cells"></div>
-                  <!-- 선택된 날짜의 일정 프리뷰 바 -->
-                  <div class="cal-selected-preview" id="cal-selected-preview">
-                    <span class="prev-badge" id="prev-date-badge">11월 5일 (오늘)</span>
-                    <span class="prev-text" id="prev-event-text">📌 KRX 정규장 회의 외 3건의 일정이 있습니다</span>
-                  </div>
-                </div>
-
-                <!-- [뷰 2] 일정 목록(Agenda) + 하단 주간 칩 뷰 -->
-                <div id="gcal-agenda-view" class="gcal-agenda-container hidden">
-                  <div class="gcal-event-list">
-                    <div class="gcal-event-row">
-                      <span class="event-color-dot" style="background:#4285f4;"></span>
-                      <div class="event-time-col">08:00 - 08:50</div>
-                      <div class="event-desc-col">
-                        <strong class="event-title">대체거래소(NXT) 프리마켓 시초가 체크</strong>
-                        <span class="event-loc">스톡 스탠바이 실시간</span>
-                      </div>
-                    </div>
-                    <div class="gcal-event-row">
-                      <span class="event-color-dot" style="background:#0f9d58;"></span>
-                      <div class="event-time-col">10:00 - 11:30</div>
-                      <div class="event-desc-col">
-                        <strong class="event-title">KRX 정규장 포트폴리오 리밸런싱 회의</strong>
-                        <span class="event-loc">구글 미트 (Google Meet)</span>
-                      </div>
-                    </div>
-                    <div class="gcal-event-row">
-                      <span class="event-color-dot" style="background:#f4b400;"></span>
-                      <div class="event-time-col">15:30 - 18:00</div>
-                      <div class="event-desc-col">
-                        <strong class="event-title">NXT 애프터마켓 대체거래소 체결 모니터링</strong>
-                        <span class="event-loc">트레이딩 데스크</span>
-                      </div>
-                    </div>
-                    <div class="gcal-event-row">
-                      <span class="event-color-dot" style="background:#a142f4;"></span>
-                      <div class="event-time-col">19:00 - 20:30</div>
-                      <div class="event-desc-col">
-                        <strong class="event-title">저녁 약속 (가족 식사)</strong>
-                        <span class="event-loc">강남 파인다이닝</span>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- 하단 주간 날짜 칩 바 -->
-                  <div class="agenda-week-strip" id="cal-grid-dyn"></div>
-                </div>
-
-                <!-- [뷰 3] 오늘의 요약 카드 (At-a-Glance Minimal) -->
-                <div id="gcal-summary-view" class="gcal-summary-container hidden">
-                  <div class="summary-hero-date">
-                    <div class="hero-day-num" id="sum-hero-day">05</div>
-                    <div class="hero-day-meta">
-                      <span class="hero-day-name" id="sum-hero-dayname">목요일</span>
-                      <span class="hero-month-name" id="sum-hero-month">2026.11</span>
-                    </div>
-                  </div>
-                  <div class="summary-next-card">
-                    <div class="next-tag">NEXT UPCOMING</div>
-                    <div class="next-title">KRX 정규장 포트폴리오 리밸런싱 회의</div>
-                    <div class="next-time">⏰ 10:00 - 11:30 (온라인 구글 미트)</div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-
           </div>
 
-          <!-- 우측 열 (실시간 국내 주가 - 4가지 위젯 스타일 지원) -->
-          <div id="col-right" class="widget-column">
-            
-            <div id="widget-stocks" class="android-widget" data-widget="stocks">
-              <div class="resize-handle handle-top"></div>
-              <div class="resize-handle handle-bottom"></div>
-              <div class="resize-handle handle-left"></div>
-              <div class="resize-handle handle-right"></div>
-              <div class="widget-action-tag">
-                <span class="tag-title">국내 주가 (KRX &amp; NXT)</span>
-                <span class="stock-style-btn" id="stock-style-toggle">스타일: 클래식 리스트 ▾</span>
-                <span class="stock-search-btn-tag" id="open-stock-manager-btn-tag">+ 종목 검색/추가</span>
+          <!-- 1번 수직 분할선 (시계 vs 캘린더) -->
+          <div class="touch-splitter vertical-splitter" id="splitter-v1">
+            <div class="splitter-handle"></div>
+          </div>
+
+          <!-- 2. 중앙 구글 캘린더 카드 -->
+          <div id="card-calendar" class="standby-card card-calendar">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="card-icon">🗓️</span>
+                <span class="card-title-text">Google Calendar</span>
+                <span class="sync-badge">● 동기화됨</span>
+              </div>
+              <button class="card-chip-btn" id="cal-view-toggle">보기: 월 캘린더 ▾</button>
+            </div>
+
+            <!-- 캘린더 본체 -->
+            <div class="card-body cal-card-body">
+              <!-- [뷰 1] 월 캘린더 그리드 -->
+              <div id="cal-view-month" class="cal-view-pane">
+                <div class="cal-days-header">
+                  <span class="day-sun">일</span>
+                  <span>월</span>
+                  <span>화</span>
+                  <span>수</span>
+                  <span>목</span>
+                  <span>금</span>
+                  <span class="day-sat">토</span>
+                </div>
+                <div class="cal-month-grid" id="cal-month-days-container">
+                  <!-- JS에서 1일~30일 동적 생성 -->
+                </div>
+                <div class="cal-today-summary-bar" id="open-cal-detail-btn-1">
+                  <span class="summary-label">오늘 일정</span>
+                  <span class="summary-text" id="cal-today-summary-text">📌 종일 입동</span>
+                  <span class="summary-more">더보기 &gt;</span>
+                </div>
               </div>
 
-              <div class="widget-inner">
-                <div class="widget-title-bar">
-                  <div class="title-left">
-                    <span class="w-heading" id="stock-view-heading">국내 주가 실시간 체결</span>
-                    <span id="market-source-pill" class="market-pill">KRX 정규 + NXT 대체거래소</span>
+              <!-- [뷰 2] 일정 목록 타임라인 -->
+              <div id="cal-view-agenda" class="cal-view-pane hidden">
+                <div class="agenda-subtitle" id="agenda-date-subtitle">오늘의 일정 (11월 7일 토요일)</div>
+                <div class="agenda-events-list">
+                  <div class="agenda-item active">
+                    <span class="event-dot" style="background:#4285f4;"></span>
+                    <span class="event-time">종일</span>
+                    <span class="event-title">입동 (절기)</span>
                   </div>
-                  <div class="market-time-hint" id="market-time-hint">
-                    NXT 거래시간: 08:00 ~ 20:00
+                  <div class="agenda-item">
+                    <span class="event-dot" style="background:#34a853;"></span>
+                    <span class="event-time">10:00 - 11:30</span>
+                    <span class="event-title">포트폴리오 주말 정기 점검</span>
+                  </div>
+                  <div class="agenda-item">
+                    <span class="event-dot" style="background:#fbbc05;"></span>
+                    <span class="event-time">14:00 - 15:30</span>
+                    <span class="event-title">글로벌 거시경제 분석 미팅</span>
+                  </div>
+                  <div class="agenda-item">
+                    <span class="event-dot" style="background:#a142f4;"></span>
+                    <span class="event-time">19:00 - 20:30</span>
+                    <span class="event-title">가족 저녁 식사</span>
                   </div>
                 </div>
-
-                <!-- [스타일 1] 클래식 실시간 호가/체결 리스트 -->
-                <div class="stock-scroll-list" id="stock-view-classic">
-                  <!-- JS 동적 렌더링 -->
+                <div class="agenda-more-row" id="open-cal-detail-btn-2">
+                  <span>더보기 &gt;</span>
                 </div>
+              </div>
 
-                <!-- [스타일 2] 미니 스파크라인 트렌드 카드 뷰 -->
-                <div class="stock-sparkline-grid hidden" id="stock-view-sparkline">
-                  <!-- JS 동적 렌더링 -->
+              <!-- [뷰 3] 오늘의 요약 카드 -->
+              <div id="cal-view-summary" class="cal-view-pane hidden">
+                <div class="summary-hero-box">
+                  <div class="hero-day-large" id="sum-day-num">07</div>
+                  <div class="hero-meta-col">
+                    <span class="hero-month-str" id="sum-month-str">11월 7일</span>
+                    <span class="hero-day-str" id="sum-day-str">토요일</span>
+                  </div>
                 </div>
-
-                <!-- [스타일 3] 시장 섹터 히트맵 뷰 (Market Heatmap) -->
-                <div class="stock-heatmap-container hidden" id="stock-view-heatmap">
-                  <!-- JS 동적 렌더링 -->
+                <div class="summary-upcoming-box" id="open-cal-detail-btn-3">
+                  <div class="upcoming-tag">NEXT UPCOMING</div>
+                  <div class="upcoming-title">입동 (절기)</div>
+                  <div class="upcoming-time">⏰ 종일</div>
                 </div>
+              </div>
+            </div>
+          </div>
 
-                <!-- [스타일 4] 1등 대장주 포커스 뷰 (Single Asset Deep Dive) -->
-                <div class="stock-focus-container hidden" id="stock-view-focus">
-                  <!-- JS 동적 렌더링 -->
-                </div>
+          <!-- 2번 수직 분할선 (캘린더 vs 국내 주가) -->
+          <div class="touch-splitter vertical-splitter" id="splitter-v2">
+            <div class="splitter-handle"></div>
+          </div>
 
+          <!-- 3. 우측 국내 주가 실시간 체결 카드 -->
+          <div id="card-stocks" class="standby-card card-stocks">
+            <div class="card-header">
+              <div class="card-header-left">
+                <span class="card-icon stock-green">📈</span>
+                <span class="card-title-text">국내 주가 실시간 체결</span>
+              </div>
+              <div class="card-header-right">
+                <button class="card-chip-btn" id="open-stock-manager-btn">더보기 &gt;</button>
+                <button class="card-chip-btn" id="stock-style-toggle">스타일 ▾</button>
               </div>
             </div>
 
+            <!-- 주가 목록 본체 -->
+            <div class="card-body stock-card-body">
+              <!-- 스타일 1: 클래식 리스트 -->
+              <div id="stock-view-classic" class="stock-list-container">
+                <!-- JS 동적 생성: 삼성전자, SK하이닉스, 현대차, HLB -->
+              </div>
+              <!-- 스타일 2: 미니 차트 카드 -->
+              <div id="stock-view-sparkline" class="stock-spark-grid hidden"></div>
+              <!-- 스타일 3: 섹터 히트맵 -->
+              <div id="stock-view-heatmap" class="stock-heat-grid hidden"></div>
+              <!-- 스타일 4: 1등 대장주 포커스 -->
+              <div id="stock-view-focus" class="stock-focus-container hidden"></div>
+            </div>
           </div>
 
         </section>
 
-        <!-- 하단 영역 (해외 선물 & 월물 지수 바 - 위아래로 넓히면 2줄 카드로 확장) -->
-        <section id="lower-zone" class="lower-zone">
-          
-          <div id="widget-futures" class="android-widget" data-widget="futures">
-            <div class="resize-handle handle-top"></div>
-            <div class="resize-handle handle-bottom"></div>
-            <div class="resize-handle handle-left"></div>
-            <div class="resize-handle handle-right"></div>
-            <div class="widget-action-tag">
-              <span class="tag-title">해외 선물 &amp; 지수 전광판 (높이를 위로 키워보세요!)</span>
+        <!-- [디자인 2] 사이버 아크 HUD 스트림 레이아웃 (테마: 사이버 선택 시 표시) -->
+        <section id="cyber-cards-zone" class="cyber-cards-row hidden">
+          <!-- 좌측 사이버 아크 원형 HUD 시계 팟 -->
+          <div id="cyber-clock-pod" class="cyber-clock-pod">
+            <div class="cyber-pod-header">
+              <span class="card-icon">📅</span>
+              <span class="card-title-text" id="cyber-clock-date">11월 7일 토요일</span>
             </div>
-
-            <div class="widget-inner futures-inner">
-              <div class="futures-grid-wrapper" id="futures-chips-box">
-                <!-- JS 동적 렌더링 -->
-              </div>
+            <div class="cyber-pod-body" id="cyber-clock-body">
+              <div class="cyber-clock-center" id="cyber-clock-slot"></div>
+            </div>
+            <div class="cyber-pod-footer">
+              <button class="card-chip-btn cyber-chip" id="cyber-clock-cycle-btn">시계 모양 ▾</button>
             </div>
           </div>
 
+          <!-- 사이버 분할선 -->
+          <div class="touch-splitter vertical-splitter" id="splitter-cyber">
+            <div class="splitter-handle"></div>
+          </div>
+
+          <!-- 우측: 상단 가로 일정 흐름 + 하단 3D 계단식 주식 선반 -->
+          <div id="cyber-right-col" class="cyber-right-col">
+            <!-- 상단 가로 일정 흐름 (HorizontalScheduleFlow) -->
+            <div class="cyber-schedule-flow-box" id="open-cal-detail-cyber">
+              <div class="flow-header">
+                <span class="card-icon">🗓️</span>
+                <span class="card-title-text">Google Calendar</span>
+                <span class="sync-badge">● 동기화됨</span>
+              </div>
+              <div class="flow-items-scroll">
+                <div class="flow-chip active"><span class="flow-dot blue"></span> 09:00 팀 회의</div>
+                <div class="flow-chip"><span class="flow-dot green"></span> 10:30 업무 보고</div>
+                <div class="flow-chip"><span class="flow-dot amber"></span> 13:00 현장 점검</div>
+                <div class="flow-chip"><span class="flow-dot purple"></span> 15:00 프로젝트 회의</div>
+              </div>
+            </div>
+
+            <!-- 하단 3D 계단식 주식 선반 (CyberStockShelves) -->
+            <div class="cyber-shelves-box">
+              <div class="shelves-header">
+                <div class="card-header-left">
+                  <span class="card-icon stock-green">📈</span>
+                  <span class="card-title-text">국내 주가 실시간 체결</span>
+                </div>
+                <button class="card-chip-btn" id="cyber-stock-manager-btn">더보기 &gt;</button>
+              </div>
+              <div class="cyber-shelves-list" id="cyber-shelves-container">
+                <!-- JS 동적 생성 -->
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 가로 분할선 (상단 3개 카드 vs 하단 지표 바) -->
+        <div class="touch-splitter horizontal-splitter" id="splitter-h">
+          <div class="splitter-handle"></div>
+        </div>
+
+        <!-- 하단 글로벌 시장 지표 바 -->
+        <section id="card-futures" class="standby-card card-futures">
+          <div class="futures-header-bar">
+            <div class="f-header-left">
+              <span class="f-globe-icon">🌐</span>
+              <span class="f-header-title">글로벌 시장 지표</span>
+              <span class="f-badge orange">실시간 &amp; 선물 15분 지연 (환율 실시간)</span>
+              <span class="f-badge gray">(갱신: <span id="f-sync-time">12:24:46</span>)</span>
+            </div>
+            <button class="card-chip-btn" id="open-futures-manager-btn">종목 관리 &gt;</button>
+          </div>
+
+          <div class="futures-items-row" id="futures-container">
+            <!-- JS 동적 생성: 나스닥100선물, WTI원유선물, VIX변동성지수, 원/달러환율 -->
+          </div>
         </section>
 
       </main>
 
-      <!-- 번인 방지 픽셀 시프트 알림 태그 -->
-      <div id="burnin-status" class="burnin-tag">
-        Samsung Galaxy One UI 9 OLED Burn-in Protection Active (Pixel Shifting)
-      </div>
-
     </div>
   </div>
 
-  <!-- 종목 & 해외 선물 검색/관리 모달 -->
+  <!-- 갤럭시 루틴 충전 자동 실행 안내 모달 -->
+  <div id="routine-modal" class="oneui-modal-overlay">
+    <div class="oneui-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">⚡ 갤럭시 루틴 충전 자동 실행 설정</h2>
+        <button class="modal-close-btn" id="close-routine-btn">✕</button>
+      </div>
+      <div class="modal-body-scroll">
+        <p class="routine-step"><strong>1. 갤럭시 [설정] 앱 실행 ➔ [모드 및 루틴] 선택</strong></p>
+        <p class="routine-step"><strong>2. 우측 상단 [+] 눌러 새 루틴 만들기</strong></p>
+        <p class="routine-step"><strong>3. [언제 실행할까요?] ➔ [충전 상태] ➔ '충전 중' 선택</strong></p>
+        <p class="routine-step"><strong>4. [무엇을 할까요?] ➔ [앱] ➔ '앱을 열거나 앱 동작 수행' ➔ 이 앱 선택</strong></p>
+        <p class="routine-desc">이제 무선 충전 거치대에 올리거나 케이블을 꽂으면 스탠바이 화면이 자동으로 켜집니다!</p>
+      </div>
+      <div class="modal-footer">
+        <button class="oneui-pill-btn highlight full-width" id="confirm-routine-btn">확인 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 종목 & 해외선물 관리 모달 -->
   <div id="stock-manager-modal" class="oneui-modal-overlay">
     <div class="oneui-modal-card">
       <div class="modal-header">
-        <div>
-          <h2 class="modal-title">주식 종목 &amp; 해외 선물 지수 관리</h2>
-          <p class="modal-sub">KRX 정규장 및 대체거래소(NXT 08:00~20:00) 종목과 해외 선물을 관리하세요.</p>
-        </div>
+        <h2 class="modal-title">주식 종목 &amp; 해외 지수 관리</h2>
         <button class="modal-close-btn" id="close-stock-manager-btn">✕</button>
       </div>
-
       <div class="tab-buttons">
-        <button class="tab-btn active" id="tab-stocks-btn">🇰🇷 국내 주식 관리 (KRX / NXT)</button>
-        <button class="tab-btn" id="tab-futures-btn">🌐 해외 선물 &amp; 지수 (월물 선택)</button>
+        <button class="tab-btn active" id="tab-stocks-btn">🇰🇷 국내 주식 관리</button>
+        <button class="tab-btn" id="tab-futures-btn">🌐 해외 지수/선물 선택</button>
       </div>
-
       <div id="tab-stocks-content" class="tab-content active">
         <div class="search-box-row">
-          <input type="text" id="stock-search-input" placeholder="종목명(예: 카카오, 에코프로, 현대차) 또는 6자리 코드 입력..." autocomplete="off">
+          <input type="text" id="stock-search-input" placeholder="종목명(삼성전자, 에코프로...) 검색">
           <button id="stock-search-btn" class="oneui-pill-btn highlight">추가</button>
         </div>
-        <div id="search-quick-tags" class="quick-tags-row">
-          <span class="tag-label">추천 빠른 추가:</span>
-        </div>
-
-        <h3 class="section-heading">현재 화면에 표시 중인 주식 종목 (<span id="tracked-stock-count">0</span>개)</h3>
         <div id="tracked-stock-list" class="manager-item-list"></div>
       </div>
-
       <div id="tab-futures-content" class="tab-content">
-        <p class="section-desc">체크한 해외 지수 및 선물이 하단 선물 전광판에 실시간으로 표시됩니다.</p>
         <div id="futures-selection-list" class="manager-item-list"></div>
       </div>
-
       <div class="modal-footer">
-        <button id="save-manager-btn" class="oneui-pill-btn highlight full-width">설정 저장 및 화면 적용</button>
+        <button id="save-manager-btn" class="oneui-pill-btn highlight full-width">저장 및 화면 적용</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 구글 캘린더 전체 일정 모달 다이얼로그 (CalendarDetailDialog) -->
+  <div id="calendar-detail-modal" class="oneui-modal-overlay">
+    <div class="oneui-modal-card">
+      <div class="modal-header">
+        <h2 class="modal-title">🗓️ Google Calendar 전체 일정</h2>
+        <button class="modal-close-btn" id="close-cal-detail-btn">✕</button>
+      </div>
+      <div class="modal-body-scroll">
+        <div class="cal-modal-date-title" id="cal-modal-today-title" style="color:var(--accent-amber); font-weight:bold; margin-bottom:12px;">오늘의 일정 (11월 7일 토요일)</div>
+        <div class="cal-modal-events-list" style="display:flex; flex-direction:column; gap:8px;">
+          <div class="modal-event-item" style="display:flex; align-items:center; gap:10px; background:#1C1E2B; padding:10px 14px; border-radius:12px;">
+            <span class="event-dot" style="width:10px; height:10px; border-radius:50%; background:#4285F4; display:inline-block;"></span>
+            <div class="m-event-info">
+              <div class="m-event-title" style="font-size:13px; font-weight:bold; color:#fff;">09:00 팀 회의</div>
+              <div class="m-event-desc" style="font-size:11px; color:#A0A4B8;">주간 포트폴리오 리밸런싱 회의</div>
+            </div>
+          </div>
+          <div class="modal-event-item" style="display:flex; align-items:center; gap:10px; background:#1C1E2B; padding:10px 14px; border-radius:12px;">
+            <span class="event-dot" style="width:10px; height:10px; border-radius:50%; background:#34A853; display:inline-block;"></span>
+            <div class="m-event-info">
+              <div class="m-event-title" style="font-size:13px; font-weight:bold; color:#fff;">10:30 업무 보고</div>
+              <div class="m-event-desc" style="font-size:11px; color:#A0A4B8;">KRX 정규장 및 NXT 대체거래소 시세 점검</div>
+            </div>
+          </div>
+          <div class="modal-event-item" style="display:flex; align-items:center; gap:10px; background:#1C1E2B; padding:10px 14px; border-radius:12px;">
+            <span class="event-dot" style="width:10px; height:10px; border-radius:50%; background:#FF9F0A; display:inline-block;"></span>
+            <div class="m-event-info">
+              <div class="m-event-title" style="font-size:13px; font-weight:bold; color:#fff;">13:00 현장 점검</div>
+              <div class="m-event-desc" style="font-size:11px; color:#A0A4B8;">인프라 및 실시간 스트리밍 모니터링</div>
+            </div>
+          </div>
+          <div class="modal-event-item" style="display:flex; align-items:center; gap:10px; background:#1C1E2B; padding:10px 14px; border-radius:12px;">
+            <span class="event-dot" style="width:10px; height:10px; border-radius:50%; background:#A142F4; display:inline-block;"></span>
+            <div class="m-event-info">
+              <div class="m-event-title" style="font-size:13px; font-weight:bold; color:#fff;">15:00 프로젝트 회의</div>
+              <div class="m-event-desc" style="font-size:11px; color:#A0A4B8;">스탠바이 앱 릴리즈 및 최종 피드백</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer" style="margin-top:14px;">
+        <button class="oneui-pill-btn highlight full-width" id="confirm-cal-detail-btn">확인 완료</button>
       </div>
     </div>
   </div>
