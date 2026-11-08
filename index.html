@@ -67,9 +67,9 @@
         </div>
       </header>
 
-      <!-- 편집 모드 퀵 액션 바 -->
+      <!-- 편집 모드 퀵 액션 바 (APK EditQuickActionsBar 100% 동일) -->
       <div id="edit-mode-quick-bar" class="edit-quick-bar hidden">
-        <span class="quick-tip">💡 <strong>분할선 조절:</strong> 카드 사이의 파란 분할선을 좌우/상하로 드래그하여 크기를 조절하세요.</span>
+        <span class="quick-tip">💡 분할선을 드래그하여 위젯의 가로폭과 하단 바 높이를 자유롭게 조절하세요. (글자/차트 크기는 자동 조절됩니다)</span>
         <div class="quick-actions">
           <button id="btn-swap-lr" class="oneui-pill-btn small">좌우 반전 ⇄</button>
           <button id="btn-reset-layout" class="oneui-pill-btn small">↺ 초기화</button>
@@ -87,37 +87,47 @@
           <div id="card-clock" class="standby-card card-clock">
             <div class="card-header">
               <div class="card-header-left">
-                <span class="card-icon">📅</span>
+                <span class="card-icon" id="clock-cal-icon">📅</span>
                 <span class="card-title-text" id="clock-date-header">11월 7일 토요일</span>
               </div>
-              <button class="card-chip-btn" id="clock-style-toggle">시계 모양 ▾</button>
+              <button class="card-chip-btn clock-amber-chip" id="clock-style-toggle">시계 모양 ▾</button>
             </div>
 
             <!-- 시계 페이스 컨테이너 -->
-            <div class="card-body clock-body-centered">
+            <div class="card-body clock-body-centered" id="classic-clock-body">
               <!-- 1) 볼드 디지털 -->
               <div id="clock-view-digital" class="clock-face-wrap hidden">
-                <div class="digital-clock-time">
+                <div class="digital-clock-time" id="digital-clock-box">
                   <span id="h-dyn">12</span><span class="colon">:</span><span id="m-dyn">24</span><span class="seconds" id="s-dyn">46</span>
                 </div>
               </div>
 
               <!-- 2) 스택형 수직 2단 시계 -->
               <div id="clock-view-stacked" class="clock-face-wrap hidden">
-                <div class="stacked-digits">
+                <div class="stacked-digits" id="stacked-clock-box">
                   <div class="stacked-hours" id="st-h-dyn">12</div>
                   <div class="stacked-mins" id="st-m-dyn">24</div>
                 </div>
               </div>
 
-              <!-- 3) 클래식 크로노 아날로그 시계 (기본 표시) -->
+              <!-- 3) 클래식 크로노 아날로그 시계 (기본 표시 - APK MinimalAnalogClock 12눈금 완벽 구현) -->
               <div id="clock-view-analog" class="clock-face-wrap">
                 <div class="analog-dial-box">
-                  <div class="analog-dial">
-                    <div class="dial-ticks">
-                      <span class="tick t-12"></span><span class="tick t-3"></span>
-                      <span class="tick t-6"></span><span class="tick t-9"></span>
-                    </div>
+                  <div class="analog-dial" id="analog-dial-el">
+                    <svg class="analog-ticks-svg" viewBox="0 0 100 100">
+                      <line x1="50" y1="3" x2="50" y2="9" stroke="rgba(160,164,184,0.65)" stroke-width="1.6" stroke-linecap="round"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(30 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(60 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="9" stroke="rgba(160,164,184,0.65)" stroke-width="1.6" stroke-linecap="round" transform="rotate(90 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(120 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(150 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="9" stroke="rgba(160,164,184,0.65)" stroke-width="1.6" stroke-linecap="round" transform="rotate(180 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(210 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(240 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="9" stroke="rgba(160,164,184,0.65)" stroke-width="1.6" stroke-linecap="round" transform="rotate(270 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(300 50 50)"/>
+                      <line x1="50" y1="3" x2="50" y2="8.5" stroke="rgba(160,164,184,0.45)" stroke-width="1.2" stroke-linecap="round" transform="rotate(330 50 50)"/>
+                    </svg>
                     <div class="dial-hand hand-h" id="a-h-dyn"></div>
                     <div class="dial-hand hand-m" id="a-m-dyn"></div>
                     <div class="dial-hand hand-s" id="a-s-dyn"></div>
@@ -128,19 +138,19 @@
 
               <!-- 4) 레트로 플립 시계 -->
               <div id="clock-view-flip" class="clock-face-wrap hidden">
-                <div class="flip-clock-row">
+                <div class="flip-clock-row" id="flip-clock-box">
                   <div class="flip-unit" id="f-h-dyn">12</div>
-                  <div class="flip-colon">:</div>
+                  <div class="flip-colon" id="f-colon-dyn">:</div>
                   <div class="flip-unit" id="f-m-dyn">24</div>
                 </div>
               </div>
 
               <!-- 5) 사이버 터미널 시계 -->
               <div id="clock-view-terminal" class="clock-face-wrap hidden">
-                <div class="terminal-text">
+                <div class="terminal-text" id="terminal-clock-box">
                   <div>&gt; TIME: <span class="term-green" id="term-time-dyn">12:24:46</span></div>
                   <div>&gt; DATE: <span class="term-cyan" id="term-date-dyn">2026-11-07 SAT</span></div>
-                  <div>&gt; ATS: <span class="term-amber">KRX/NXT_CLOSED</span></div>
+                  <div>&gt; ATS: <span class="term-amber">KRX/NXT_SYNC</span></div>
                 </div>
               </div>
             </div>
@@ -268,9 +278,9 @@
 
         </section>
 
-        <!-- [디자인 2] 사이버 아크 HUD 스트림 레이아웃 (테마: 사이버 선택 시 표시) -->
+        <!-- [디자인 2] 사이버 아크 HUD 스트림 레이아웃 (APK CyberArcLayout 100% 동일) -->
         <section id="cyber-cards-zone" class="cyber-cards-row hidden">
-          <!-- 좌측 사이버 아크 원형 HUD 시계 팟 -->
+          <!-- 좌측 사이버 아크 원형 HUD 시계 팟 (CyberArcClockPod) -->
           <div id="cyber-clock-pod" class="cyber-clock-pod">
             <div class="cyber-pod-header">
               <span class="card-icon">📅</span>
@@ -280,8 +290,9 @@
               <div class="cyber-clock-center" id="cyber-clock-slot"></div>
             </div>
             <div class="cyber-pod-footer">
-              <button class="card-chip-btn cyber-chip" id="cyber-clock-cycle-btn">시계 모양 ▾</button>
+              <button class="card-chip-btn cyber-chip" id="cyber-clock-cycle-btn">시계 모양 변경 ▾</button>
             </div>
+            <div class="cyber-curve-badge">● 미국장 프리마켓</div>
           </div>
 
           <!-- 사이버 분할선 -->
@@ -327,7 +338,7 @@
           <div class="splitter-handle"></div>
         </div>
 
-        <!-- 하단 글로벌 시장 지표 바 -->
+        <!-- 하단 글로벌 시장 지표 바 (APK GlobalIndexBar 100% 동일) -->
         <section id="card-futures" class="standby-card card-futures">
           <div class="futures-header-bar">
             <div class="f-header-left">
@@ -349,49 +360,66 @@
     </div>
   </div>
 
-  <!-- 갤럭시 루틴 충전 자동 실행 안내 모달 -->
+  <!-- 갤럭시 루틴 충전 자동 실행 안내 모달 (APK GalaxyRoutineGuideDialog 100% 동일) -->
   <div id="routine-modal" class="oneui-modal-overlay">
     <div class="oneui-modal-card">
       <div class="modal-header">
-        <h2 class="modal-title">⚡ 갤럭시 루틴 충전 자동 실행 설정</h2>
+        <h2 class="modal-title">⚡ 갤럭시 [모드 및 루틴] 충전 자동 켜짐 설정</h2>
         <button class="modal-close-btn" id="close-routine-btn">✕</button>
       </div>
       <div class="modal-body-scroll">
-        <p class="routine-step"><strong>1. 갤럭시 [설정] 앱 실행 ➔ [모드 및 루틴] 선택</strong></p>
-        <p class="routine-step"><strong>2. 우측 상단 [+] 눌러 새 루틴 만들기</strong></p>
-        <p class="routine-step"><strong>3. [언제 실행할까요?] ➔ [충전 상태] ➔ '충전 중' 선택</strong></p>
-        <p class="routine-step"><strong>4. [무엇을 할까요?] ➔ [앱] ➔ '앱을 열거나 앱 동작 수행' ➔ 이 앱 선택</strong></p>
-        <p class="routine-desc">이제 무선 충전 거치대에 올리거나 케이블을 꽂으면 스탠바이 화면이 자동으로 켜집니다!</p>
+        <p style="color:#90CAF9; font-size:12px; line-height:1.5; margin-bottom:10px;">
+          안드로이드 최신 버전(One UI 5/6)의 보안 정책으로 인해 화면이 꺼져 있을 때 앱 자동 실행이 차단될 수 있습니다.<br><br>
+          삼성 갤럭시 기본 내장 기능인 <strong>[모드 및 루틴]</strong>을 사용하시면 충전기를 꽂는 즉시 0.1초 만에 화면이 켜지며 스탠바이가 100% 무조건 실행됩니다!
+        </p>
+        <div style="background:#1E212B; border-radius:12px; padding:12px;">
+          <div style="color:#FF9F0A; font-weight:bold; font-size:13px; margin-bottom:6px;">📌 1분 초간단 설정 순서:</div>
+          <p class="routine-step">1. 갤럭시 <strong>[설정] ➔ [모드 및 루틴]</strong> 열기</p>
+          <p class="routine-step">2. 상단 <strong>[+] (루틴 만들기)</strong> 터치</p>
+          <p class="routine-step">3. <strong>[언제 실행할까요?]</strong> ➔ '충전 상태' ➔ '충전 중' 선택</p>
+          <p class="routine-step">4. <strong>[무엇을 할까요?]</strong> ➔ '애플리케이션' ➔ '앱을 열기' ➔ 'Stock StandBy' 선택</p>
+          <p class="routine-step">5. 저장하면 끝! 이제 충전기를 꽂으면 언제나 즉시 켜집니다.</p>
+        </div>
       </div>
       <div class="modal-footer">
-        <button class="oneui-pill-btn highlight full-width" id="confirm-routine-btn">확인 완료</button>
+        <button class="oneui-pill-btn amber full-width" id="confirm-routine-btn" style="background:#FF9F0A; color:#000; font-weight:800;">확인 완료</button>
       </div>
     </div>
   </div>
 
-  <!-- 종목 & 해외선물 관리 모달 -->
+  <!-- 종목 & 해외선물 바둑판 관리 모달 (APK StockManagerDialog & GlobalIndexManagerDialog 100% 동일) -->
   <div id="stock-manager-modal" class="oneui-modal-overlay">
-    <div class="oneui-modal-card">
+    <div class="oneui-modal-card wide-modal">
       <div class="modal-header">
-        <h2 class="modal-title">주식 종목 &amp; 해외 지수 관리</h2>
+        <div>
+          <h2 class="modal-title" id="manager-modal-title">📈 종목 관리 바둑판</h2>
+          <div class="modal-subtitle" id="manager-modal-subtitle">박스를 터치하면 그 자리에서 즉시 추가되거나 빠집니다</div>
+        </div>
         <button class="modal-close-btn" id="close-stock-manager-btn">✕</button>
       </div>
       <div class="tab-buttons">
-        <button class="tab-btn active" id="tab-stocks-btn">🇰🇷 국내 주식 관리</button>
-        <button class="tab-btn" id="tab-futures-btn">🌐 해외 지수/선물 선택</button>
+        <button class="tab-btn active" id="tab-stocks-btn">📈 국내 주식 바둑판 관리</button>
+        <button class="tab-btn" id="tab-futures-btn">🌐 해외선물 및 글로벌 지수 관리</button>
       </div>
       <div id="tab-stocks-content" class="tab-content active">
         <div class="search-box-row">
-          <input type="text" id="stock-search-input" placeholder="종목명(삼성전자, 에코프로...) 검색">
-          <button id="stock-search-btn" class="oneui-pill-btn highlight">추가</button>
+          <input type="text" id="stock-search-input" placeholder="🔍 종목명 또는 코드 검색 (예: 카카오, 에코, 현대, 005930)">
+          <button id="stock-search-clear-btn" class="oneui-pill-btn small">초기화</button>
         </div>
-        <div id="tracked-stock-list" class="manager-item-list"></div>
+        <div class="manager-status-label" id="stock-grid-status-label">현재 감시 중인 종목 · 터치하면 즉시 제외됩니다</div>
+        <div id="tracked-stock-list" class="manager-tile-grid cols-3"></div>
+        <div class="manual-add-row">
+          <input type="text" id="manual-stock-name" placeholder="직접 추가할 종목명">
+          <input type="text" id="manual-stock-code" placeholder="6자리 코드 (예: 005930)">
+          <button id="stock-search-btn" class="oneui-pill-btn highlight">+ 직접 추가</button>
+        </div>
       </div>
-      <div id="tab-futures-content" class="tab-content">
-        <div id="futures-selection-list" class="manager-item-list"></div>
+      <div id="tab-futures-content" class="tab-content hidden">
+        <div class="manager-status-label">타일을 터치하여 하단 지표 바에 표시할 종목을 자유롭게 넣고 빼세요</div>
+        <div id="futures-selection-list" class="manager-tile-grid cols-2"></div>
       </div>
-      <div class="modal-footer">
-        <button id="save-manager-btn" class="oneui-pill-btn highlight full-width">저장 및 화면 적용</button>
+      <div class="modal-footer" style="margin-top:10px;">
+        <button id="save-manager-btn" class="oneui-pill-btn highlight full-width" style="background:#30D158; color:#000; font-weight:800;">적용 완료</button>
       </div>
     </div>
   </div>
